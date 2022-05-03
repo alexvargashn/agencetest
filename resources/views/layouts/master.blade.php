@@ -11,6 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>AgenceTest</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @yield('adminlte-plugins-css')
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -291,6 +292,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js') }}"></script>
+    @stack('adminlte-plugins')
     <script>
         function activeMode(e) {
             $('.active').removeClass('active');
