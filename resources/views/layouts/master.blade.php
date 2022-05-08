@@ -8,6 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>AgenceTest</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -171,7 +172,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" onclick="activeMode(this)" class="nav-link">
+                                    <a href="{{route('performancecomercial.index')}}" onclick="activeMode(this)" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Performance Comercial</p>
                                     </a>
@@ -292,7 +293,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js') }}"></script>
-    @stack('adminlte-plugins')
+   @stack('adminlte-plugins')
     <script>
         function activeMode(e) {
             $('.active').removeClass('active');
