@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="{{ asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
-
 @section('template_title')
     Performance Comercial
 @endsection
@@ -76,13 +75,23 @@
                                                     <h3 class="card-title" style="word-break: break-word;">Acciones</h3>
                                                 </div>
                                                 <div class="card-body row">
-                                                    <button type="button" class="btn btn-primary btn-block"
-                                                        onclick="relatorico()"><i class="fas fa-calculator fa-fw"></i>
-                                                        Relatórico</button>
-                                                    <button type="button" class="btn btn-info btn-block btn-flat"><i
-                                                            class="fa fa-bell"></i>Gráfico</button>
-                                                    <button type="button" class="btn btn-danger btn-block btn-sm"><i
-                                                            class="fa fa-bell"></i>Pizza</button>
+                                                    <button type="button" 
+                                                            class="btn btn-primary btn-block"
+                                                            onclick="relatorico()">
+                                                        <i class="fas fa-calculator fa-fw"></i>
+                                                        Reporte
+                                                    </button>
+                                                    <button type="button" 
+                                                            class="btn btn-info btn-block btn-flat"
+                                                            onclick="grafico()">
+                                                            <i class="fas fa-chart-column fa-fw"></i> 
+                                                            Gráfico
+                                                    </button>
+                                                    <button type="button" 
+                                                            class="btn btn-danger btn-block btn-sm"
+                                                            onclick="pizza()">
+                                                            <i class="fas fa-chart-pie fa-fw"></i> Pizza
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -98,7 +107,7 @@
                                                     </div>
                                                     <!-- /.card-header -->
                                                     <div class="card-body">
-                                                        <table class="table table-bordered"id="tablaConsultores"
+                                                        <table class="table table-bordered" id="tablaConsultores"
                                                             class="table table-bordered tablaConsultores">
                                                             <thead>
                                                                 <tr>
@@ -134,6 +143,49 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">
+                                                        Gráficos
+                                                    </h3>
+                                                </div>
+                                                <!-- /.card-header -->
+                                                <div class="card-body">
+                                                    <figure class="highcharts-figure">
+                                                        <div id="container"></div>
+                                                        <p class="highcharts-description">
+                                                            Se muestra las ganancias obtenidas por cada consultor en un periodo de tiempo
+                                                            determinado, comparado al costo fijo promedio de todos ellos.
+                                                        </p>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">
+                                                        Pizza
+                                                    </h3>
+                                                </div>
+                                                <!-- /.card-header -->
+                                                <div class="card-body">
+                                                    <figure class="highcharts-figure">
+                                                        <div id="container2"></div>
+                                                        <p class="highcharts-description">
+                                                            Porcentaje de ganancias generadas por cada consultor dado
+                                                            un periodo de tiempo en relación al total de ganancias 
+                                                            generadas por todos ellos.
+                                                        </p>
+                                                    </figure>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,153 +235,26 @@
 
     <!-- AdminLTE App -->
     <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+    <script src="{{asset('js/performance-comercial/index.js')}}"></script>
+    <script src="{{asset('js/performance-comercial/graficos.js')}}"></script>
+    <script src="{{asset('js/performance-comercial/consumibles.js')}}"></script>
     <script>
         $(function() {
-           /* $('.tablaConsultores').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });*/
+             $token = "{{ csrf_token() }}";
             $('.duallistbox').bootstrapDualListbox();
             //Date range picker
             $('#reservation').daterangepicker();
-        })
+        });
     </script>
     <script>
-        function relatorico() {
-            alert("relatorico");
-            let _token = "{{ csrf_token() }}";
-            $.ajax({
-                headers: {
-                    'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
-                },
-                url: "performancecomercial/relatorico",
-                type: "POST",
-                cache: false,
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    _method: "POST",
-                    consultores: getConsultores()
-                },
-                datatype: 'html',
-                success: function(data) {
-                    tabularDataConsultores(getDTConsultoresPorNombre(data[0]));
-                }
-            });
-        }
-
-        function getConsultores() {
-            let consultores = [];
-            $('#consultores option:selected').each(function(i, selected) {
-                consultores[i] = $(selected).val();
-            });
-            return consultores;
-        }
-
-        function getDTConsultoresPorNombre(consultores) {
-            let ordenada = consultores.reduce(function(resultado, actual) {
-                resultado[actual.nombreusuario] = resultado[actual.nombreusuario] || [];
-                resultado[actual.nombreusuario].push(actual);
-                return resultado;
-            }, {});
-            console.log(ordenada);
-            return ordenada;
-        }
-
-        function tabularDataConsultores(consultores) {
-            let html = '';
-            let tabla = $('#tabConsultores');
-            tabla.html('');
-            let j = 0;
-
-            let sumGanancia = 0;
-            let sumCostoFijo = 0;
-            let sumComision = 0;
-            let sumLucro = 0;
-            for (i in consultores) {
-                console.log(i);
-                
-                html += generarEncabezadoConsultor(i);
-                html += generarComienzoCuerpoTablaConsultor(j);
-                consultores[i].forEach(dato => {
-                    html += generartrConsultor(dato);
-                    console.log(dato);
-                    sumGanancia += dato.ganancia;
-                    sumCostoFijo += dato.costofijo;
-                    sumComision += dato.comision;
-                    sumLucro += dato.lucro;
-                });
-                html += '<tr class="card-header"><td class="font-weight: bold;">Saldo</td><td>'+sumGanancia+'</td><td>'+sumCostoFijo+'</td><td>'+sumCostoFijo+'</td><td>'+sumLucro+'</td></tr>';
-                html += generarCierreTablaConsultor();
-                tabla.append(html);
-                $('.tablaConsultores-' + j).DataTable({
-                    "paging": false,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": false,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-                html = '';
-                j++;
-            }
-        }
-
-        function generarEncabezadoConsultor(nombreconsultor) {
-            let html = '';
-            if (nombreconsultor != null) {
-                html += '<div class="card">';
-                html += '<div class="card-header">';
-                html += '<h3 class="card-title">';
-                html += nombreconsultor;
-                html += '</h3>';
-                html += '</div>';
-            }
-            return html;
-        }
-
-        function generarComienzoCuerpoTablaConsultor(i) {
-            let html = '<div class="card-body">';
-            html += '<table class="table table-bordered tablaConsultores-' + i + '" > ';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th>Período</th>';
-            html += '<th>Ganancias</th>';
-            html += '<th>Costo Fijo</th>';
-            html += '<th>Comisión</th>';
-            html += '<th>Lucro</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '<tbody>';
-            return html;
-        }
-
-        function generartrConsultor(consultor) {
-            let html = '';
-            if (consultor != null) {
-                html += '<tr>';
-                html += '<td>' + consultor.mes + '</td>'
-                html += '<td>' + consultor.ganancia + '</td>';
-                html += '<td>' + consultor.costofijo + '</td>';
-                html += '<td>' + consultor.comision + '</td>';
-                html += '<td>' + consultor.lucro + '</td>';
-                html += '</tr>'
-            }
-            return html;
-        }
-
-        function generarCierreTablaConsultor() {
-            let html = '</tr>';
-            html += '</tbody>';
-            html += '</table>';
-            html += '</div>';
-            html += '</div>';
-            return html;
-        }
+        
     </script>
 @endpush

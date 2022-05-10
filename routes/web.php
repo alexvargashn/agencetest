@@ -27,8 +27,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/performancecomercial', [App\Http\Controllers\PerformanceComercialController::class, 'index'])
     ->name('performancecomercial.index');
 
-Route::post('performancecomercial/relatorico', [\App\Http\Controllers\PerformanceComercialController::class, 'relatorico'])
-->name('performancecomercial.relatorico');
+Route::post('performancecomercial/reporte', [\App\Http\Controllers\PerformanceComercialController::class, 'reporte'])
+->name('performancecomercial.reporte');
 
 Route::resource('users', \App\Http\Controllers\UserController::class);
 
