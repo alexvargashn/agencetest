@@ -44,26 +44,17 @@ class PerformanceComercialController extends Controller
         return view('performance-comercial.index', compact('consultores'));
     }
 
-    public function hola()
-    {
-        $consultores = DB::table('cao_usuario')
-            ->join('permissao_sistema', 'cao_usuario.co_usuario', '=', 'permissao_sistema.co_usuario')
-            ->where('permissao_sistema.co_sistema', '=', '1')
-            ->where('permissao_sistema.in_ativo', '=', 'S')
-            ->where('permissao_sistema.co_tipo_usuario', '=', '0')
-            ->orWhere('permissao_sistema.co_tipo_usuario', '=', '1')
-            ->orWhere('permissao_sistema.co_tipo_usuario', '=', '2')
-            ->orderBy('cao_usuario.no_usuario', 'ASC')
-            ->get();
-        return view('performance-comercial.index', compact('consultores'));
-    }
-
     public function Reporte(Request $request)
     {
         // $viewRender = view('performancecomercial.index')->render();
         try {
-            $consultores = $this->getCalculoReporte($request->consultores);
-            $periodos = $this->getPeriodos($request->consultores);
+            $consultores = [];
+            $periodos = [];
+            if (isset($request->consultores) && isset($request->periodo)) {
+                $consultores = $this->getCalculoReporte($request->consultores, $request->periodo);
+                $periodos = $this->getPeriodos($request->consultores, $request->periodo);
+            }
+
             return response()->json(array(
                 "success" => true,
                 "consultores" => $consultores,
@@ -77,7 +68,7 @@ class PerformanceComercialController extends Controller
         }
     }
 
-    private function getCalculoReporte($consultores)
+    private function getCalculoReporte($consultores, $periodo)
     {
         $resultado = [false, "Error"];
         DB::statement("SET lc_time_names = 'es_ES'");
@@ -93,6 +84,7 @@ class PerformanceComercialController extends Controller
                 DB::raw('YEAR(' . $this->f . '.data_emissao) AS anio'),
                 DB::raw('MONTHNAME(' . $this->f . '.data_emissao) AS nombremes'),
                 DB::raw('CONCAT(' . DB::raw('MONTHNAME(' . $this->f . '.data_emissao)') . ', " de ",' . DB::raw('YEAR(' . $this->f . '.data_emissao)') . ') AS periodo'),
+                DB::raw('CONCAT(SUBSTRING(MONTHNAME(' . $this->f . '.data_emissao), 1, 3), "-", YEAR(' . $this->f . '.data_emissao)) AS tag'),
                 $this->f . '.total_imp_inc'
             )
             ->join($this->c, $this->f . '.co_cliente', '=', $this->c . '.co_cliente')
@@ -104,22 +96,22 @@ class PerformanceComercialController extends Controller
             ->groupBy('mes')
             ->orderBy($this->u . '.co_usuario')
             ->orderBy('mes')
-            ->whereBetween($this->f . '.data_emissao', array('2007-01-02', '2022-05-03'))
+            ->whereBetween($this->f . '.data_emissao', array($periodo[0], $periodo[1]))
             ->whereIn($this->u . '.co_usuario', $consultores)
             ->get();
 
         return $resultado;
     }
 
-    private function getPeriodos($consultores)
+    private function getPeriodos($consultores, $periodo)
     {
         $resultado = [false, "Error"];;
         DB::statement("SET lc_time_names = 'es_ES'");
         $resultado = DB::table($this->f)
             ->select(
                 DB::raw('DISTINCT MONTH(' . $this->f . '.data_emissao) AS mes'),
-                DB::raw('MONTHNAME('.$this->f.'.data_emissao) AS nombremes'),
-                DB::raw('YEAR('.$this->f.'.data_emissao) AS anio'),
+                DB::raw('MONTHNAME(' . $this->f . '.data_emissao) AS nombremes'),
+                DB::raw('YEAR(' . $this->f . '.data_emissao) AS anio'),
                 DB::raw('CONCAT(SUBSTRING(MONTHNAME(' . $this->f . '.data_emissao), 1, 3), "-", YEAR(' . $this->f . '.data_emissao)) AS tag')
             )
             ->join($this->c, $this->f . '.co_cliente', '=', $this->c . '.co_cliente')
@@ -129,7 +121,7 @@ class PerformanceComercialController extends Controller
             ->join($this->o, $this->f . '.co_os', '=', $this->o . '.co_os')
             ->orderBy('mes')
             ->orderBy('anio')
-            ->whereBetween($this->f . '.data_emissao', array('2007-01-02', '2022-05-03'))
+            ->whereBetween($this->f . '.data_emissao', array($periodo[0], $periodo[1]))
             ->whereIn($this->u . '.co_usuario', $consultores)
             ->get();
         return $resultado;

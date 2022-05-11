@@ -11,13 +11,28 @@ function ajaxReporteConsultores() {
         data: {
             _token: $token,
             _method: "POST",
-            consultores: getConsultores()
+            consultores: getConsultores(),
+            periodo: getFechaInicioFin()
         },
         datatype: 'html',
         success: function(data) {
             console.log(data);
-            responseReporte = data;
+            data.success ? responseReporte = data : alert(data.error);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
         }
     });
     return responseReporte;
+}
+
+function getFechaInicioFin() {
+    let periodo = $('#periodo').val().split('-');
+    console.log(periodo);
+    orden = (fecha) => {
+        let dato = fecha.split('/');
+        return dato[2].trim() + '-' + dato[1].trim() + '-' + dato[0].trim();
+    }
+    return [orden(periodo[0]), orden(periodo[1])];
 }

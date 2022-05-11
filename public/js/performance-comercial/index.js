@@ -1,5 +1,6 @@
-function relatorico() {
-    alert("relatorico");
+function relatorico(e) {
+    //e.preventDefault();
+    $('.modal').modal('show');
     tabularDataConsultores(
         getDTConsultoresPorNombre(
             ajaxReporteConsultores().consultores));
@@ -22,38 +23,68 @@ function getDTConsultoresPorNombre(consultores) {
     return ordenada;
 }
 
+function getSalarios(consultores) {
+    let salarios = consultores.reduce(function(resultado, actual) {
+        resultado[actual.costofijo] = resultado[actual.costofijo] || [];
+        resultado[actual.costofijo].push(actual);
+        return resultado;
+    }, {});
+    return salarios;
+}
+
+function getCostoFijoPromedio(salarios) {
+    let costoFijoPromedio = 0;
+    let j = 0;
+    for (i in salarios) {
+        costoFijoPromedio += Number(i);
+        j++;
+    }
+    return (costoFijoPromedio / j);
+}
+
 function tabularDataConsultores(consultores) {
     let html = '';
     let tabla = $('#tabConsultores');
     tabla.html('');
     let j = 0;
+    console.log(consultores);
+    if (!jQuery.isEmptyObject(consultores)) {
+        for (i in consultores) {
+            let [sumGanancia, sumCostoFijo, sumComision, sumLucro] = [0, 0, 0, 0];
+            html += generarEncabezadoConsultor(i);
+            html += generarComienzoCuerpoTablaConsultor(j);
+            consultores[i].forEach(dato => {
+                html += generartrConsultor(dato);
+                sumGanancia += dato.ganancia;
+                sumCostoFijo += dato.costofijo;
+                sumComision += dato.comision;
+                sumLucro += dato.lucro;
+            });
+            html += getFinalTR(sumGanancia, sumCostoFijo, sumComision, sumLucro);;
+            html += generarCierreTablaConsultor();
+            tabla.append(html);
+            $('.tablaConsultores-' + j).DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true
+            });
+            html = '';
+            j++;
+        }
 
-    for (i in consultores) {
-        let [sumGanancia, sumCostoFijo, sumComision, sumLucro] = [0, 0, 0, 0];
-        html += generarEncabezadoConsultor(i);
-        html += generarComienzoCuerpoTablaConsultor(j);
-        consultores[i].forEach(dato => {
-            html += generartrConsultor(dato);
-            sumGanancia += dato.ganancia;
-            sumCostoFijo += dato.costofijo;
-            sumComision += dato.comision;
-            sumLucro += dato.lucro;
-        });
-        html += getFinalTR(sumGanancia, sumCostoFijo, sumComision, sumLucro);;
-        html += generarCierreTablaConsultor();
-        tabla.append(html);
-        $('.tablaConsultores-' + j).DataTable({
-            "paging": false,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": false,
-            "info": false,
-            "autoWidth": false,
-            "responsive": true
-        });
-        html = '';
-        j++;
+    } else {
+        alert("No se encontraron datos en la consulta");
     }
+    setTimeout(function() {
+        $("#graficoBarras").css("display", "none");
+        $("#graficoPizza").css("display", "none");
+        $("#tabConsultores").css("display", "block");
+        $('.modal').modal('hide');
+    }, 1000);
 }
 
 function getFinalTR(sumGanancia, sumCostoFijo, sumComision, sumLucro) {

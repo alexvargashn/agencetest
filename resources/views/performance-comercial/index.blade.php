@@ -53,7 +53,7 @@
                                                             <i class="far fa-calendar-alt"></i>
                                                         </span>
                                                     </div>
-                                                    <input type="text" class="form-control float-right" id="reservation">
+                                                    <input type="text" class="form-control float-right" id="periodo">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
@@ -75,28 +75,25 @@
                                                     <h3 class="card-title" style="word-break: break-word;">Acciones</h3>
                                                 </div>
                                                 <div class="card-body row">
-                                                    <button type="button" 
-                                                            class="btn btn-primary btn-block"
-                                                            onclick="relatorico()">
+                                                    <button type="button" class="btn btn-primary btn-block"
+                                                        onclick="relatorico(event)">
                                                         <i class="fas fa-calculator fa-fw"></i>
                                                         Reporte
                                                     </button>
-                                                    <button type="button" 
-                                                            class="btn btn-info btn-block btn-flat"
-                                                            onclick="grafico()">
-                                                            <i class="fas fa-chart-column fa-fw"></i> 
-                                                            Gráfico
+                                                    <button type="button" class="btn btn-info btn-block btn-flat"
+                                                        onclick="grafico(event)">
+                                                        <i class="fas fa-chart-column fa-fw"></i>
+                                                        Gráfico
                                                     </button>
-                                                    <button type="button" 
-                                                            class="btn btn-danger btn-block btn-sm"
-                                                            onclick="pizza()">
-                                                            <i class="fas fa-chart-pie fa-fw"></i> Pizza
+                                                    <button type="button" class="btn btn-danger btn-block btn-sm"
+                                                        onclick="pizza(event)">
+                                                        <i class="fas fa-chart-pie fa-fw"></i> Pizza
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tabConsultores">
+                                    <div id="tabConsultores" style="display: none;">
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="card">
@@ -147,45 +144,51 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">
-                                                        Gráficos
-                                                    </h3>
-                                                </div>
-                                                <!-- /.card-header -->
-                                                <div class="card-body">
-                                                    <figure class="highcharts-figure">
-                                                        <div id="container"></div>
-                                                        <p class="highcharts-description">
-                                                            Se muestra las ganancias obtenidas por cada consultor en un periodo de tiempo
-                                                            determinado, comparado al costo fijo promedio de todos ellos.
-                                                        </p>
-                                                    </figure>
+                                    <div id="graficoBarras" style="display: none;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">
+                                                            Gráficos
+                                                        </h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <figure class="highcharts-figure">
+                                                            <div id="container"></div>
+                                                            <p class="highcharts-description">
+                                                                Se muestra las ganancias obtenidas por cada consultor en un
+                                                                periodo de tiempo
+                                                                determinado, comparado al costo fijo promedio de todos
+                                                                ellos.
+                                                            </p>
+                                                        </figure>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">
-                                                        Pizza
-                                                    </h3>
-                                                </div>
-                                                <!-- /.card-header -->
-                                                <div class="card-body">
-                                                    <figure class="highcharts-figure">
-                                                        <div id="container2"></div>
-                                                        <p class="highcharts-description">
-                                                            Porcentaje de ganancias generadas por cada consultor dado
-                                                            un periodo de tiempo en relación al total de ganancias 
-                                                            generadas por todos ellos.
-                                                        </p>
-                                                    </figure>
+                                    <div id="graficoPizza" style="display: none;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">
+                                                            Pizza
+                                                        </h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <figure class="highcharts-figure">
+                                                            <div id="container2"></div>
+                                                            <p class="highcharts-description">
+                                                                Porcentaje de ganancias generadas por cada consultor dado
+                                                                un periodo de tiempo en relación al total de ganancias
+                                                                generadas por todos ellos.
+                                                            </p>
+                                                        </figure>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -200,6 +203,11 @@
                     </div>
                 </div>
                 <!-- /.card -->
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+                <span class="fa fa-spinner fa-spin fa-3x"></span>
             </div>
         </div>
     </div>
@@ -227,14 +235,14 @@
 
 
     <!-- Bootstrap4 Duallistbox -->
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
     <!-- InputMask -->
     <script src="{{ asset('/plugins/moment/moment.min.js') }}"></script>
     <!-- date-range-picker -->
     <script src="{{ asset('/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
-    <!-- AdminLTE App -->
-    <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+   
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
@@ -243,18 +251,50 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
-    <script src="{{asset('js/performance-comercial/index.js')}}"></script>
-    <script src="{{asset('js/performance-comercial/graficos.js')}}"></script>
-    <script src="{{asset('js/performance-comercial/consumibles.js')}}"></script>
+
+    <script src="{{ asset('js/performance-comercial/index.js') }}"></script>
+    <script src="{{ asset('js/performance-comercial/graficos.js') }}"></script>
+    <script src="{{ asset('js/performance-comercial/consumibles.js') }}"></script>
+
+     <!-- AdminLTE App -->
+     <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
     <script>
         $(function() {
-             $token = "{{ csrf_token() }}";
+            $token = "{{ csrf_token() }}";
             $('.duallistbox').bootstrapDualListbox();
             //Date range picker
-            $('#reservation').daterangepicker();
+            $('#periodo').daterangepicker({
+                'locale': {
+                    "applyLabel": "Aceptar",
+                    "cancelLabel": "Cancelar",
+                    "daysOfWeek": [
+                        "Do",
+                        "Lu",
+                        "Ma",
+                        "Mi",
+                        "Ju",
+                        "Vi",
+                        "Sa"
+                    ],
+                    "monthNames": [
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Deciembre"
+                    ]
+                }
+            });
         });
     </script>
     <script>
-        
+
     </script>
 @endpush
