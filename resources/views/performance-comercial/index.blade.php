@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('adminlte-plugins-css')
-    <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Bootstrap4 Duallistbox -->
     <link rel="stylesheet" href="{{ asset('/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') }}">
     <!-- daterange picker -->
@@ -10,7 +10,9 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+
     <link rel="stylesheet" href="{{ asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
 @endsection
 @section('template_title')
     Performance Comercial
@@ -93,56 +95,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tabConsultores" style="display: none;">
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h3 class="card-title">
-                                                            Ana Paula Fontes Martins Chiodaro
-                                                        </h3>
-                                                    </div>
-                                                    <!-- /.card-header -->
-                                                    <div class="card-body">
-                                                        <table class="table table-bordered" id="tablaConsultores"
-                                                            class="table table-bordered tablaConsultores">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Período</th>
-                                                                    <th>Ganancias</th>
-                                                                    <th>Costo Fijo</th>
-                                                                    <th>Comisión</th>
-                                                                    <th>Lucro</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>Enero de 2007</td>
-                                                                    <td>R$ 1.500,00</td>
-                                                                    <td>- R$ 2.000,00</td>
-                                                                    <td>- R$ 1.000,00</td>
-                                                                    <td>- R$ 1.500,00</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Enero de 2007</td>
-                                                                    <td>R$ 1.500,00</td>
-                                                                    <td>- R$ 2.000,00</td>
-                                                                    <td>- R$ 1.000,00</td>
-                                                                    <td>- R$ 1.500,00</td>
-                                                                </tr>
-                                                                <tr class="card-header">
-                                                                    <td>Saldo</td>
-                                                                    <td>R$ 3.000,00</td>
-                                                                    <td>- R$ 4.000,00</td>
-                                                                    <td>- R$ 1.000,00</td>
-                                                                    <td>- R$ 1.500,00</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div id="tabConsultores" style="">
+
                                     </div>
                                     <div id="graficoBarras" style="display: none;">
                                         <div class="container-fluid">
@@ -213,12 +167,13 @@
     </div>
     </div>
 @endsection
-@push('adminlte-plugins')
-    <!-- jQuery -->
+<!-- jQuery -->
+
+@section('scripts')
     <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
+    <!-- AdminLTE App -->
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -235,14 +190,14 @@
 
 
     <!-- Bootstrap4 Duallistbox -->
-    <script src="{{ asset('js/app.js') }}"></script>
+
     <script src="{{ asset('/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
     <!-- InputMask -->
     <script src="{{ asset('/plugins/moment/moment.min.js') }}"></script>
     <!-- date-range-picker -->
     <script src="{{ asset('/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
-   
+
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
@@ -256,8 +211,8 @@
     <script src="{{ asset('js/performance-comercial/graficos.js') }}"></script>
     <script src="{{ asset('js/performance-comercial/consumibles.js') }}"></script>
 
-     <!-- AdminLTE App -->
-     <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+
+
     <script>
         $(function() {
             $token = "{{ csrf_token() }}";
@@ -294,7 +249,4 @@
             });
         });
     </script>
-    <script>
-
-    </script>
-@endpush
+@endsection

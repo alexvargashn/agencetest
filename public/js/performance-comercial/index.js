@@ -1,6 +1,7 @@
 function relatorico(e) {
     //e.preventDefault();
     $('.modal').modal('show');
+    $('#tabConsultores').css('display', 'block');
     tabularDataConsultores(
         getDTConsultoresPorNombre(
             ajaxReporteConsultores().consultores));
@@ -47,7 +48,6 @@ function tabularDataConsultores(consultores) {
     let tabla = $('#tabConsultores');
     tabla.html('');
     let j = 0;
-    console.log(consultores);
     if (!jQuery.isEmptyObject(consultores)) {
         for (i in consultores) {
             let [sumGanancia, sumCostoFijo, sumComision, sumLucro] = [0, 0, 0, 0];
@@ -63,28 +63,30 @@ function tabularDataConsultores(consultores) {
             html += getFinalTR(sumGanancia, sumCostoFijo, sumComision, sumLucro);;
             html += generarCierreTablaConsultor();
             tabla.append(html);
-            $('.tablaConsultores-' + j).DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": false,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true
-            });
+            executeTable(j);
             html = '';
             j++;
         }
-
+        display('tabConsultores');
     } else {
         alert("No se encontraron datos en la consulta");
+        display('');
     }
     setTimeout(function() {
-        $("#graficoBarras").css("display", "none");
-        $("#graficoPizza").css("display", "none");
-        $("#tabConsultores").css("display", "block");
         $('.modal').modal('hide');
     }, 1000);
+}
+
+function executeTable(indice) {
+    $('.tablaConsultores-' + indice).DataTable({
+        "paging": false,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": false,
+        "info": false,
+        "autoWidth": false,
+        "responsive": true
+    });
 }
 
 function getFinalTR(sumGanancia, sumCostoFijo, sumComision, sumLucro) {

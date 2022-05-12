@@ -17,7 +17,7 @@
 @endsection
 
 @section('namepage')
-Contacto
+    Contacto
 @endsection
 
 @section('content')
@@ -50,10 +50,11 @@ Contacto
                         </div>
                         <div class="card-footer">
                             <div class="text-right">
-                                <a href="https://github.com/alexvargashn" class="btn btn-sm btn-secondary">
+                                <a href="https://github.com/alexvargashn" class="btn btn-sm btn-secondary" target="_blank">
                                     <i class="fab fa-github"></i> GitHub
                                 </a>
-                                <a href="https://www.linkedin.com/in/alexvargashn/" class="btn btn-sm btn-primary">
+                                <a href="https://www.linkedin.com/in/alexvargashn/" class="btn btn-sm btn-primary"
+                                    target="_blank">
                                     <i class="fab fa-linkedin-in"></i> LinkedIn
                                 </a>
                             </div>
@@ -66,16 +67,3 @@ Contacto
     </div>
     <!-- /.card -->
 @endsection
-@push('adminlte-plugins')
-    <!-- jQuery -->
-    <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-    <!-- AdminLTE App -->
-    <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
-
-    <script>
-
-    </script>
-@endpush

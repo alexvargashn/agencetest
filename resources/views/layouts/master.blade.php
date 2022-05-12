@@ -12,6 +12,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>AgenceTest</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
     @yield('adminlte-plugins-css')
 </head>
 
@@ -27,10 +28,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{route('home')}}" class="nav-link">Inicio</a>
+                    <a href="{{ route('home') }}" class="nav-link">Inicio</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{route('contact')}}" class="nav-link">Contacto</a>
+                    <a href="{{ route('contact') }}" class="nav-link">Contacto</a>
                 </li>
             </ul>
 
@@ -56,8 +57,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                                 document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                                                             document.getElementById('logout-form').submit();">
                                 Salir
                             </a>
 
@@ -74,9 +76,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="{{route('home')}}" class="brand-link">
-                <img src="{{asset('dist/img/AdminLTELogo.png')}}" alt="AgenceTest Logo" class="brand-image img-circle elevation-3"
-                    style="opacity: .8">
+            <a href="{{ route('home') }}" class="brand-link">
+                <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AgenceTest Logo"
+                    class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">AgenceTest</span>
             </a>
 
@@ -172,7 +174,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route('performancecomercial.index')}}" onclick="activeMode(this)" class="nav-link">
+                                    <a href="{{ route('performancecomercial.index') }}" onclick="activeMode(this)"
+                                        class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Performance Comercial</p>
                                     </a>
@@ -285,13 +288,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
+
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js') }}"></script>
-   @stack('adminlte-plugins')
+    @yield('scripts')
     <script>
         function activeMode(e) {
             $('.active').removeClass('active');
-
             $(e).addClass('active');
             console.log(e);
             $('.nav-item menu-is-opening menu-open a').first().addClass('active');
