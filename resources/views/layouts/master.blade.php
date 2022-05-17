@@ -223,7 +223,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <i class="nav-icon fas fa-power-off fa-fw"></i>
                                 <p>
                                     Salir
-                                    <span class="right badge badge-danger">New</span>
                                 </p>
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -290,6 +289,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery -->
 
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
     @yield('scripts')
     <script>
         function activeMode(e) {

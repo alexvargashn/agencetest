@@ -84,7 +84,7 @@
                                                     </button>
                                                     <button type="button" class="btn btn-info btn-block btn-flat"
                                                         onclick="grafico(event)">
-                                                        <i class="fas fa-chart-column fa-fw"></i>
+                                                        <i class="fas fa-chart-bar fa-fw"></i>
                                                         Gráfico
                                                     </button>
                                                     <button type="button" class="btn btn-danger btn-block btn-sm"
@@ -173,6 +173,8 @@
     <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script> --}}
+   
     <!-- AdminLTE App -->
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -181,9 +183,6 @@
     <script src="{{ asset('/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('/plugins/pdfmake/vfs_fonts.js') }}"></script>
     <script src="{{ asset('/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>

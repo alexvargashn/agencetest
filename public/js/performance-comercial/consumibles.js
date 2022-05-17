@@ -16,6 +16,7 @@ function ajaxReporteConsultores() {
         },
         datatype: 'html',
         success: function(data) {
+            console.log(data);
             data.success ? responseReporte = data : alert(data.error);
         },
         error: function(xhr, ajaxOptions, thrownError) {
@@ -32,7 +33,7 @@ function getFechaInicioFin() {
     let periodo = $('#periodo').val().split('-');
     orden = (fecha) => {
         let dato = fecha.split('/');
-        return dato[2].trim() + '-' + dato[1].trim() + '-' + dato[0].trim();
+        return dato[2].trim() + '-' + dato[0].trim() + '-' + dato[1].trim();
     }
     return [orden(periodo[0]), orden(periodo[1])];
 }

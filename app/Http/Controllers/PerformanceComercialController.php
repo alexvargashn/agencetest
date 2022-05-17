@@ -50,19 +50,22 @@ class PerformanceComercialController extends Controller
         try {
             $consultores = [];
             $periodos = [];
+            $success = false;
             if (isset($request->consultores) && isset($request->periodo)) {
                 $consultores = $this->getCalculoReporte($request->consultores, $request->periodo);
                 $periodos = $this->getPeriodos($request->consultores, $request->periodo);
+                $success = true;
             }
 
             return response()->json(array(
-                "success" => true,
+                "success" => $success,
                 "consultores" => $consultores,
-                "periodos" => $periodos
+                "periodos" => $periodos,
+                "fechas" => $request->periodo
             ));
         } catch (Exception $e) {
             return response()->json(array(
-                "success" => false,
+                "success" => $success,
                 "error" => $e->getCode() . " / " . $e->getMessage()
             ));
         }
@@ -96,7 +99,7 @@ class PerformanceComercialController extends Controller
             ->groupBy('mes')
             ->orderBy($this->u . '.co_usuario')
             ->orderBy('mes')
-            ->whereBetween($this->f . '.data_emissao', array($periodo[0], $periodo[1]))
+            ->whereBetween($this->f . '.data_emissao', array($periodo[0] , $periodo[1]))
             ->whereIn($this->u . '.co_usuario', $consultores)
             ->get();
 
@@ -121,7 +124,7 @@ class PerformanceComercialController extends Controller
             ->join($this->o, $this->f . '.co_os', '=', $this->o . '.co_os')
             ->orderBy('mes')
             ->orderBy('anio')
-            ->whereBetween($this->f . '.data_emissao', array($periodo[0], $periodo[1]))
+            ->whereBetween($this->f . '.data_emissao', array($periodo[0] , $periodo[1]))
             ->whereIn($this->u . '.co_usuario', $consultores)
             ->get();
         return $resultado;
